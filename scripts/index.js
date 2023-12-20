@@ -157,3 +157,11 @@ const result = getResults(finances, finances.length);
 
 // print on console
 prettyPrinter(result);
+
+// change HTML
+
+document.getElementById("dataCount").innerHTML = result.count;
+document.getElementById("dataTotal").innerHTML = "$ " + result.total;
+document.getElementById("dataAvg").innerHTML = "$ " + Math.round(result.avg * 100) / 100 + " per month";
+document.getElementById("dataMax").innerHTML = result.max_date + " $(" + result.max + ")";
+document.getElementById("dataMin").innerHTML = result.min_date + " $(" + result.min + ")";
