@@ -1,3 +1,6 @@
+
+// source data
+
 var finances = [
   ['Jan-2010', 867884],
   ['Feb-2010', 984655],
@@ -86,3 +89,79 @@ var finances = [
   ['Jan-2017', 138230],
   ['Feb-2017', 671099],
 ];
+
+// base logic
+
+function getResults(data, data_lenght){
+  // getting the array in param and then asking array.lenght inside the function for some reason didn't work
+  // so I send the lenght as param
+
+  var total = 0, min = 0, max = 0; // init up variables
+  var min_date = 'not yet defined', max_date = 'not yet defined';
+  const record_count =  data_lenght; // get total number of records (explanation above)
+  var change_total = 0;
+  
+
+  data.forEach( (record , index) => {
+      if (typeof record[1] === 'number') {
+          var current_change = 0;
+          if (index > 0 ) {
+            current_change = (data[index-1][1] - record[1]) * -1;
+            change_total += current_change;
+          }        
+
+          // getting sum of records
+          total = total + record[1];
+          
+          // getting the greatest loss
+          if (min > current_change) {
+              min = current_change;
+              min_date = record[0];
+          }
+
+          // getting the greatest profit
+          if (max < current_change) {
+              max = current_change;
+              max_date = record[0];
+          }
+      }
+  });
+
+  const avg = change_total / (record_count - 1);
+
+
+  return {
+      "total" : total,
+      "avg" : avg, 
+      "min" : min,
+      "min_date": min_date,
+      "max" : max,
+      "max_date" : max_date,
+      "count" : record_count
+  }
+}
+
+// console output
+function prettyPrinter(data) {
+  console.log("Financial Analysis");
+  console.log("----------------------------");
+  console.log("Total Months: " + data.count);
+  console.log("Total: $" + data.total);
+  console.log("Average Change: $" + Math.round(data.avg * 100) / 100 + " per month");
+  console.log("Greatest Increase in Profits/Losses: " + data.max_date + " $(" + data.max + ")");
+  console.log("Greatest Decrease in Profits/Losses: " + data.min_date + " $(" + data.min + ")");
+}
+
+// run logic
+const result = getResults(finances, finances.length);
+
+// print on console
+prettyPrinter(result);
+
+// change HTML
+
+document.getElementById("dataCount").innerHTML = result.count;
+document.getElementById("dataTotal").innerHTML = "$ " + result.total;
+document.getElementById("dataAvg").innerHTML = "$ " + Math.round(result.avg * 100) / 100 + " per month";
+document.getElementById("dataMax").innerHTML = result.max_date + " $(" + result.max + ")";
+document.getElementById("dataMin").innerHTML = result.min_date + " $(" + result.min + ")";
